@@ -2,6 +2,7 @@ package at.uibk.dps.producer.core.config;
 
 import lombok.Data;
 import org.apache.kafka.common.record.CompressionType;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class ProducerConfig {
         properties.put("buffer.memory", bufferMemory);
         properties.put("compression.type", compressionType);
         properties.put("key.serializer", StringSerializer.class.getName());
-        properties.put("value.serializer", StringSerializer.class.getName());
+        properties.put("value.serializer", ByteArrayDeserializer.class.getName());
         return properties;
     }
 }
