@@ -1,6 +1,8 @@
 package at.uibk.dps.consumer.module.message.poll.business;
 
 import at.uibk.dps.consumer.module.message.poll.abstraction.IMessagePoller;
+import io.opentelemetry.api.metrics.LongCounter;
+import io.opentelemetry.api.metrics.Meter;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,13 @@ public class MessagePoller implements IMessagePoller {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private KafkaConsumer<String, byte[]> consumer;
     private Thread pollThread;
+    private final LongCounter counter;
+
+    public MessagePoller(Meter meter) {
+        this.counter = meter.counterBuilder("consumer.messages.polled")
+                .setDescription("Messages polled")
+                .build();
+    }
 
     @Override
     public synchronized void start(KafkaConsumer<String, byte[]> consumer) {
@@ -35,7 +44,8 @@ public class MessagePoller implements IMessagePoller {
     private void run() {
         try {
             while (running.get()) {
-                consumer.poll(Duration.ofMillis(500));
+                var records = consumer.poll(Duration.ofMillis(500));
+                counter.add(records.count());
                 consumer.commitAsync();
             }
         } catch (WakeupException ignored) {
