@@ -18,6 +18,7 @@ public class ProducerConfig {
     private long bufferMemory = 33554432;
     private CompressionType compressionType = CompressionType.NONE;
     private String bootstrapServers;
+    private String topic = "messages";
 
     public Properties getProperties() {
         var properties = new Properties();
