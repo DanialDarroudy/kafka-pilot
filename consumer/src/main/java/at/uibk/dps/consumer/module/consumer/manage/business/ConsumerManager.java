@@ -9,12 +9,14 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class ConsumerManager implements IConsumerManager {
     private final Logger logger;
     private final ConsumerConfig config;
     private final IMessagePoller messagePoller;
+    private AtomicReference<KafkaConsumer<String, byte[]>> consumerAtomicReference;
 
     public ConsumerManager(Logger logger, ConsumerConfig config, IMessagePoller messagePoller) {
         this.logger = logger;
@@ -37,8 +39,14 @@ public class ConsumerManager implements IConsumerManager {
                 .setSeverity(Severity.INFO);
     }
 
+    @Override
+    public KafkaConsumer<String, byte[]> getConsumer() {
+        return consumerAtomicReference.get();
+    }
+
     private void startConsumer() {
         var consumer = new KafkaConsumer<String, byte[]>(config.getProperties());
+        consumerAtomicReference.set(consumer);
         consumer.subscribe(Collections.singletonList(config.getTopic()));
         messagePoller.start(consumer);
     }
