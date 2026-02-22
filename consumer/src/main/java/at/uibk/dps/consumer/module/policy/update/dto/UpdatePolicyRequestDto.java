@@ -7,4 +7,6 @@ public class UpdatePolicyRequestDto {
     private long fetchMinBytes;
     private int fetchMaxWaitMs;
     private long maxPollRecords;
+    private int maxPollIntervalMs;
+    private int sessionTimeoutMs;
 }
