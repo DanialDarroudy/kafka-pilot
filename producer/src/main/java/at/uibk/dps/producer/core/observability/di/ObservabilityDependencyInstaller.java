@@ -48,6 +48,8 @@ public class ObservabilityDependencyInstaller {
                 .build();
 
         var processor = BatchLogRecordProcessor.builder(exporter)
+                .setMaxExportBatchSize(config.getLog().getMaxBatchSize())
+                .setMaxQueueSize(config.getLog().getMaxQueueSize())
                 .build();
 
         var provider = SdkLoggerProvider.builder()

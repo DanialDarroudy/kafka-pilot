@@ -19,6 +19,7 @@ public class PolicyGetter implements IPolicyGetter {
                 setBatchSize(config.getBatchSize());
                 setBufferMemory(config.getBufferMemory());
                 setCompressionType(config.getCompressionType());
+                setAcks(config.getAcks());
             }
         };
     }

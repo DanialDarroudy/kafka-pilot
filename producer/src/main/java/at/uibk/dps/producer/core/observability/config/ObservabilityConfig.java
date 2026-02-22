@@ -15,6 +15,8 @@ public class ObservabilityConfig {
     @Data
     public static class Log {
         private int exportTimeoutSeconds = 10;
+        private int maxBatchSize = 512;
+        private int maxQueueSize = 2048;
     }
 
     @Data

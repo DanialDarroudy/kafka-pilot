@@ -9,4 +9,5 @@ public class UpdatePolicyRequestDto {
     private int lingerMs;
     private long bufferMemory;
     private CompressionType compressionType;
+    private String acks;
 }

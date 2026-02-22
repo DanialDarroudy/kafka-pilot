@@ -2,7 +2,7 @@ package at.uibk.dps.producer.core.config;
 
 import lombok.Data;
 import org.apache.kafka.common.record.CompressionType;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
+import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,7 @@ public class ProducerConfig {
     private int lingerMs = 1;
     private long bufferMemory = 33554432;
     private CompressionType compressionType = CompressionType.NONE;
+    private String acks = "1";
     private String bootstrapServers;
     private String topic = "messages";
 
@@ -27,8 +28,9 @@ public class ProducerConfig {
         properties.put("linger.ms", lingerMs);
         properties.put("buffer.memory", bufferMemory);
         properties.put("compression.type", compressionType);
+        properties.put("acks", acks);
         properties.put("key.serializer", StringSerializer.class.getName());
-        properties.put("value.serializer", ByteArrayDeserializer.class.getName());
+        properties.put("value.serializer", ByteArraySerializer.class.getName());
         return properties;
     }
 }
