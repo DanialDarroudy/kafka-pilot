@@ -30,7 +30,7 @@ public class PolicyController {
     }
 
     @PutMapping()
-    public ResponseEntity<Object> updatePolicy(@RequestBody UpdatePolicyRequestDto dto) {
+    public ResponseEntity<Void> updatePolicy(@RequestBody UpdatePolicyRequestDto dto) {
         policyUpdater.updatePolicy(dto);
 
         logger.logRecordBuilder()

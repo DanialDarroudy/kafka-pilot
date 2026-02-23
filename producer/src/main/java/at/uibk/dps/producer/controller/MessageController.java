@@ -16,7 +16,7 @@ public class MessageController {
     private final IMessageSender messageSender;
 
     @PostMapping()
-    public ResponseEntity<Object> sendMessage(@RequestBody SendMessageRequestDto dto) {
+    public ResponseEntity<Void> sendMessage(@RequestBody SendMessageRequestDto dto) {
         messageSender.send(dto);
         return ResponseEntity.ok().build();
     }
