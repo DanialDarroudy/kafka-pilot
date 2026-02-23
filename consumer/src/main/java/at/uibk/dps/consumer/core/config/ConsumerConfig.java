@@ -1,6 +1,7 @@
 package at.uibk.dps.consumer.core.config;
 
 import lombok.Data;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,6 +13,7 @@ import java.util.Properties;
 @Component
 @ConfigurationProperties(prefix = "consumer")
 public class ConsumerConfig {
+    private String id;
     private long fetchMinBytes = 1048576;
     private int fetchMaxWaitMs = 50;
     private long maxPollRecords = 500;
@@ -32,6 +34,9 @@ public class ConsumerConfig {
         properties.put("max.poll.interval.ms", maxPollIntervalMs);
         properties.put("key.deserializer", StringDeserializer.class.getName());
         properties.put("value.deserializer", ByteArrayDeserializer.class.getName());
+        properties.put("client.id", id);
+        properties.put("group.instance.id", id);
+        properties.put("partition.assignment.strategy", CooperativeStickyAssignor.class.getName());
         return properties;
     }
 }

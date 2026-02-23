@@ -16,7 +16,7 @@ public class MessagePoller implements IMessagePoller {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private KafkaConsumer<String, byte[]> consumer;
     private Thread pollThread;
-    private ConsumerConfig config;
+    private final ConsumerConfig config;
 
     @Override
     public synchronized void start(KafkaConsumer<String, byte[]> consumer) {

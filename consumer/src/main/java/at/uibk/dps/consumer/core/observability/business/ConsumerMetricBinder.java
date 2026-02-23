@@ -1,6 +1,9 @@
 package at.uibk.dps.consumer.core.observability.business;
 
+import at.uibk.dps.consumer.core.config.ConsumerConfig;
 import at.uibk.dps.consumer.module.consumer.manage.abstraction.IConsumerManager;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.metrics.ObservableDoubleGauge;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +20,7 @@ import java.util.Map;
 public class ConsumerMetricBinder {
     private final Meter meter;
     private final IConsumerManager consumerManager;
+    private final ConsumerConfig config;
     private final List<ObservableDoubleGauge> registeredGauges = new ArrayList<>();
     private static final Map<String, String> KAFKA_METRICS = Map.of(
             "records-lag-max", "records",
@@ -39,7 +43,10 @@ public class ConsumerMetricBinder {
                             measurement.record(0.0);
                             return;
                         }
-                        measurement.record(extractMetricValue(consumer, metricName));
+                        measurement.record(extractMetricValue(consumer, metricName), Attributes.of(
+                                AttributeKey.stringKey("consumer_id"),
+                                config.getId()
+                        ));
                     });
             registeredGauges.add(gauge);
         });
