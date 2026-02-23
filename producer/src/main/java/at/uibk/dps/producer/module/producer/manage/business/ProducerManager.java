@@ -27,7 +27,8 @@ public class ProducerManager implements IProducerManager {
 
         logger.logRecordBuilder()
                 .setAttribute("Message", "create and set new producer due to policy change")
-                .setSeverity(Severity.INFO);
+                .setSeverity(Severity.INFO)
+                .emit();
 
         this.producerAtomicReference.set(new KafkaProducer<>(config.getProperties()));
 
@@ -36,7 +37,8 @@ public class ProducerManager implements IProducerManager {
 
         logger.logRecordBuilder()
                 .setAttribute("Message", "flushed and closed old producer due to policy change")
-                .setSeverity(Severity.INFO);
+                .setSeverity(Severity.INFO)
+                .emit();
     }
 
     @Override

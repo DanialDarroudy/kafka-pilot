@@ -29,14 +29,16 @@ public class ConsumerManager implements IConsumerManager {
     public synchronized void policyChanged() {
         logger.logRecordBuilder()
                 .setAttribute("Message", "consumer policy changed, restarting consumer")
-                .setSeverity(Severity.INFO);
+                .setSeverity(Severity.INFO)
+                .emit();
 
         stopConsumer();
         startConsumer();
 
         logger.logRecordBuilder()
                 .setAttribute("Message", "consumer restarted with new policy")
-                .setSeverity(Severity.INFO);
+                .setSeverity(Severity.INFO)
+                .emit();
     }
 
     @Override

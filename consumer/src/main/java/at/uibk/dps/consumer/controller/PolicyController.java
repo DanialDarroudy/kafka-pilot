@@ -36,7 +36,8 @@ public class PolicyController {
         logger.logRecordBuilder()
                 .setAttribute("Message", "Updated policy with new configuration")
                 .setSeverity(Severity.INFO)
-                .setBody(dto.toString());
+                .setBody(dto.toString())
+                .emit();
 
         counter.add(1);
 
