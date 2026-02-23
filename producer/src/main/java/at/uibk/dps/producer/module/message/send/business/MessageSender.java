@@ -23,7 +23,13 @@ public class MessageSender implements IMessageSender {
             producer.send(record);
         } catch (KafkaException e) {
             // for race condition on reconfiguration
-            producerManager.getProducer().send(record);
+            var currentProducer = producerManager.getProducer();
+            if (currentProducer != producer) {
+                // Producer was swapped due to policy change
+                currentProducer.send(record);
+            } else {
+                throw e; // real error, not reconfiguration
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ import java.util.Properties;
 @Component
 @ConfigurationProperties(prefix = "producer")
 public class ProducerConfig {
+    private String id;
     private int batchSize = 16384;
     private int lingerMs = 1;
     private long bufferMemory = 33554432;
@@ -31,6 +32,7 @@ public class ProducerConfig {
         properties.put("acks", acks);
         properties.put("key.serializer", StringSerializer.class.getName());
         properties.put("value.serializer", ByteArraySerializer.class.getName());
+        properties.put("client.id", id);
         return properties;
     }
 }

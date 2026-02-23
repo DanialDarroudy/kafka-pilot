@@ -1,6 +1,9 @@
 package at.uibk.dps.producer.core.observability.business;
 
+import at.uibk.dps.producer.core.config.ProducerConfig;
 import at.uibk.dps.producer.module.producer.manage.abstraction.IProducerManager;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.metrics.ObservableDoubleGauge;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +20,7 @@ import java.util.Map;
 public class ProducerMetricBinder {
     private final Meter meter;
     private final IProducerManager producerManager;
+    private final ProducerConfig config;
     private final List<ObservableDoubleGauge> registeredGauges = new ArrayList<>();
     private static final Map<String, String> KAFKA_METRICS = Map.of(
             "record-send-rate", "/s",
@@ -43,7 +47,10 @@ public class ProducerMetricBinder {
                             measurement.record(0.0);
                             return;
                         }
-                        measurement.record(extractMetricValue(producer, metricName));
+                        measurement.record(extractMetricValue(producer, metricName), Attributes.of(
+                                AttributeKey.stringKey("producer_id"),
+                                config.getId()
+                        ));
                     });
             registeredGauges.add(gauge);
         });
