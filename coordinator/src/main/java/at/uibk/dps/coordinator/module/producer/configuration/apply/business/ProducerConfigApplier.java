@@ -1,8 +1,8 @@
-package at.uibk.dps.coordinator.module.config.producer.apply.business;
+package at.uibk.dps.coordinator.module.producer.configuration.apply.business;
 
-import at.uibk.dps.coordinator.core.config.CoordinatorConfig;
-import at.uibk.dps.coordinator.module.config.producer.apply.abstraction.IProducerConfigApplier;
-import at.uibk.dps.coordinator.module.config.producer.apply.dto.ApplyProducerConfigRequestDto;
+import at.uibk.dps.coordinator.module.producer.configuration.apply.abstraction.IProducerConfigApplier;
+import at.uibk.dps.coordinator.module.producer.configuration.apply.dto.ApplyProducerConfigRequestDto;
+import at.uibk.dps.coordinator.module.producer.configuration.config.ProducerConfig;
 import io.opentelemetry.api.logs.Logger;
 import io.opentelemetry.api.logs.Severity;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class ProducerConfigApplier implements IProducerConfigApplier {
-    private final CoordinatorConfig config;
+    private final ProducerConfig config;
     private final RestTemplate restTemplate;
     private final Logger logger;
 
     @Override
     public void apply(String baseUrl, ApplyProducerConfigRequestDto dto) {
-        var finalUrl = baseUrl + config.getProducer().getPolicyApi();
+        var finalUrl = baseUrl + config.getPolicyApi();
         try {
             logger.logRecordBuilder()
                     .setAttribute("Message", "Applying producer config")

@@ -1,8 +1,8 @@
-package at.uibk.dps.coordinator.module.config.consumer.apply.business;
+package at.uibk.dps.coordinator.module.consumer.configuration.apply.business;
 
-import at.uibk.dps.coordinator.core.config.CoordinatorConfig;
-import at.uibk.dps.coordinator.module.config.consumer.apply.abstraction.IConsumerConfigApplier;
-import at.uibk.dps.coordinator.module.config.consumer.apply.dto.ApplyConsumerConfigRequestDto;
+import at.uibk.dps.coordinator.module.consumer.configuration.apply.abstraction.IConsumerConfigApplier;
+import at.uibk.dps.coordinator.module.consumer.configuration.apply.dto.ApplyConsumerConfigRequestDto;
+import at.uibk.dps.coordinator.module.consumer.configuration.config.ConsumerConfig;
 import io.opentelemetry.api.logs.Logger;
 import io.opentelemetry.api.logs.Severity;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class ConsumerConfigApplier implements IConsumerConfigApplier {
-    private final CoordinatorConfig config;
+    private final ConsumerConfig config;
     private final RestTemplate restTemplate;
     private final Logger logger;
 
     @Override
     public void apply(String baseUrl, ApplyConsumerConfigRequestDto dto) {
-        var finalUrl = baseUrl + config.getConsumer().getPolicyApi();
+        var finalUrl = baseUrl + config.getPolicyApi();
         try {
             logger.logRecordBuilder()
                     .setAttribute("Message", "Applying consumer config")
