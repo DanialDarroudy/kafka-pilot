@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: coordinator
+
+server:
+  port: 8082
+
+observability:
+  otel:
+    collector-grpc-endpoint: http://localhost:4317
+    connection-timeout-seconds: 5
+  metric:
+    read-interval-seconds: 30
+    export-timeout-seconds: 10
+  log:
+    export-timeout-seconds: 10
+    max-batch-size: 512
+    max-queue-size: 2048
+
+prometheus:
+  url: http://localhost:9090
+
+producer:
+  policy-api: /api/v1/policies
+  instances:
+    - base-url: http://localhost:8080
+      prom-label: producer-1
+
+consumer:
+  policy-api: /api/v1/policies
+  instances:
+    - base-url: http://localhost:8081
+      prom-label: consumer-1
+
+broker:
+  bootstrapServers: localhost:9092
+  ids:
+    - 1
+
+regime-detection:
+  consumer:
+    records-lag-max:
+      type: ewma_cusum
+      ewma-alpha: 0.2
+      cusum-threshold: 2000
+      cusum-drift: 50
+
+    fetch-rate:
+      type: ewma_cusum
+      ewma-alpha: 0.4
+      cusum-threshold: 500
+      cusum-drift: 20
+
+    commit-rate:
+      type: ewma_cusum
+      ewma-alpha: 0.5
+      cusum-threshold: 300
+      cusum-drift: 10
+
+    join-total:
+      type: event
