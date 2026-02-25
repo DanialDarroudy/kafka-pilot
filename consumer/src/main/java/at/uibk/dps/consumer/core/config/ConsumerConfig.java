@@ -14,9 +14,9 @@ import java.util.Properties;
 @ConfigurationProperties(prefix = "consumer")
 public class ConsumerConfig {
     private String id;
-    private long fetchMinBytes = 1048576;
+    private int fetchMinBytes = 1048576;
     private int fetchMaxWaitMs = 50;
-    private long maxPollRecords = 500;
+    private int maxPollRecords = 500;
     private int maxPollIntervalMs = 300000;
     private int sessionTimeoutMs = 10000;
     private String bootstrapServers;

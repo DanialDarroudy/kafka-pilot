@@ -1,12 +1,14 @@
 package at.uibk.dps.consumer.module.policy.get.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class GetPolicyResponseDto {
-    private long fetchMinBytes;
+    private int fetchMinBytes;
     private int fetchMaxWaitMs;
-    private long maxPollRecords;
+    private int maxPollRecords;
     private int maxPollIntervalMs;
     private int sessionTimeoutMs;
 }

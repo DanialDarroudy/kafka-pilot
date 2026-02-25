@@ -13,14 +13,12 @@ public class PolicyGetter implements IPolicyGetter {
 
     @Override
     public GetPolicyResponseDto getPolicy() {
-        return new GetPolicyResponseDto(){
-            {
-                setFetchMinBytes(config.getFetchMinBytes());
-                setFetchMaxWaitMs(config.getFetchMaxWaitMs());
-                setMaxPollRecords(config.getMaxPollRecords());
-                setMaxPollIntervalMs(config.getMaxPollIntervalMs());
-                setSessionTimeoutMs(config.getSessionTimeoutMs());
-            }
-        };
+        return GetPolicyResponseDto.builder()
+                .fetchMinBytes(config.getFetchMinBytes())
+                .fetchMaxWaitMs(config.getFetchMaxWaitMs())
+                .maxPollRecords(config.getMaxPollRecords())
+                .sessionTimeoutMs(config.getSessionTimeoutMs())
+                .maxPollIntervalMs(config.getMaxPollIntervalMs())
+                .build();
     }
 }
