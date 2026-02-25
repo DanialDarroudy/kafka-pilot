@@ -28,7 +28,7 @@ public class ProducerConfig {
         properties.put("batch.size", batchSize);
         properties.put("linger.ms", lingerMs);
         properties.put("buffer.memory", bufferMemory);
-        properties.put("compression.type", compressionType);
+        properties.put("compression.type", compressionType.name().toLowerCase());
         properties.put("acks", acks);
         properties.put("key.serializer", StringSerializer.class.getName());
         properties.put("value.serializer", ByteArraySerializer.class.getName());

@@ -13,14 +13,12 @@ public class PolicyGetter implements IPolicyGetter {
 
     @Override
     public GetPolicyResponseDto getPolicy() {
-        return new GetPolicyResponseDto(){
-            {
-                setLingerMs(config.getLingerMs());
-                setBatchSize(config.getBatchSize());
-                setBufferMemory(config.getBufferMemory());
-                setCompressionType(config.getCompressionType());
-                setAcks(config.getAcks());
-            }
-        };
+        return GetPolicyResponseDto.builder()
+                .compressionType(config.getCompressionType())
+                .acks(config.getAcks())
+                .bufferMemory(config.getBufferMemory())
+                .batchSize(config.getBatchSize())
+                .lingerMs(config.getLingerMs())
+                .build();
     }
 }
