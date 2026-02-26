@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class ProducerConfigApplier implements IProducerConfigApplier {
@@ -18,7 +20,17 @@ public class ProducerConfigApplier implements IProducerConfigApplier {
     private final Logger logger;
 
     @Override
-    public void apply(String baseUrl, ApplyProducerConfigRequestDto dto) {
+    public void apply(String producerId, ApplyProducerConfigRequestDto dto) {
+        var optionalBaseUrl = findBaseUrlByProducerId(producerId);
+        if (optionalBaseUrl.isEmpty()){
+            logger.logRecordBuilder()
+                    .setAttribute("Message", "Producer Id is not in the config")
+                    .setAttribute("ProducerId", producerId)
+                    .setSeverity(Severity.ERROR)
+                    .emit();
+            return;
+        }
+        var baseUrl = optionalBaseUrl.get();
         var finalUrl = baseUrl + config.getPolicyApi();
         try {
             logger.logRecordBuilder()
@@ -52,5 +64,14 @@ public class ProducerConfigApplier implements IProducerConfigApplier {
                     .setBody(exception.getMessage())
                     .emit();
         }
+    }
+
+    private Optional<String> findBaseUrlByProducerId(String producerId) {
+        for (var instance : config.getInstances()){
+            if (instance.getPromLabel().equals(producerId)){
+                return Optional.ofNullable(instance.getBaseUrl());
+            }
+        }
+        return Optional.empty();
     }
 }

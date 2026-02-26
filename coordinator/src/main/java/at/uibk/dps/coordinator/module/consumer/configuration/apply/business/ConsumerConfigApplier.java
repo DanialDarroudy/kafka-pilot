@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class ConsumerConfigApplier implements IConsumerConfigApplier {
@@ -18,7 +20,17 @@ public class ConsumerConfigApplier implements IConsumerConfigApplier {
     private final Logger logger;
 
     @Override
-    public void apply(String baseUrl, ApplyConsumerConfigRequestDto dto) {
+    public void apply(String consumerId, ApplyConsumerConfigRequestDto dto) {
+        var optionalBaseUrl = findBaseUrlByConsumerId(consumerId);
+        if (optionalBaseUrl.isEmpty()){
+            logger.logRecordBuilder()
+                    .setAttribute("Message", "Consumer Id is not in the config")
+                    .setAttribute("ConsumerId", consumerId)
+                    .setSeverity(Severity.ERROR)
+                    .emit();
+            return;
+        }
+        var baseUrl = optionalBaseUrl.get();
         var finalUrl = baseUrl + config.getPolicyApi();
         try {
             logger.logRecordBuilder()
@@ -52,5 +64,14 @@ public class ConsumerConfigApplier implements IConsumerConfigApplier {
                     .setBody(exception.getMessage())
                     .emit();
         }
+    }
+
+    private Optional<String> findBaseUrlByConsumerId(String consumerId) {
+        for (var instance : config.getInstances()){
+            if (instance.getPromLabel().equals(consumerId)){
+                return Optional.ofNullable(instance.getBaseUrl());
+            }
+        }
+        return Optional.empty();
     }
 }
