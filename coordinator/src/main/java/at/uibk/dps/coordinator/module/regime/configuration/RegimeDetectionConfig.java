@@ -19,5 +19,6 @@ public class RegimeDetectionConfig {
         private Double ewmaAlpha;
         private Double cusumThreshold;
         private Double cusumDrift;
+        private Double eventThreshold;
     }
 }

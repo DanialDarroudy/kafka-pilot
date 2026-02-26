@@ -39,6 +39,7 @@ broker:
 
 regime-detection:
   metric-detection-map:
+    # for consumer
     records-lag-max:
       type: ewma_cusum
       ewma-alpha: 0.2
@@ -59,3 +60,49 @@ regime-detection:
 
     join-total:
       type: event
+      event-threshold: 0
+
+    # for producer
+    record-send-rate:
+      type: ewma_cusum
+      ewma-alpha: 0.3
+      cusum-threshold: 5000
+      cusum-drift: 100
+
+    outgoing-byte-rate:
+      type: ewma_cusum
+      ewma-alpha: 0.3
+      cusum-threshold: 500000
+      cusum-drift: 10000
+
+    record-size-avg:
+      type: ewma_cusum
+      ewma-alpha: 0.2
+      cusum-threshold: 500
+      cusum-drift: 10
+
+    request-latency-avg:
+      type: ewma_cusum
+      ewma-alpha: 0.4
+      cusum-threshold: 20
+      cusum-drift: 2
+
+    request-latency-max:
+      type: ewma_cusum
+      ewma-alpha: 0.4
+      cusum-threshold: 50
+      cusum-drift: 5
+
+    buffer-available-bytes:
+      type: ewma_cusum
+      ewma-alpha: 0.3
+      cusum-threshold: 10000000
+      cusum-drift: 1000000
+
+    record-error-rate:
+      type: event
+      event-threshold: 0.1
+
+    record-retry-rate:
+      type: event
+      event-threshold: 0.5

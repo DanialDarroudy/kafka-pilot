@@ -18,7 +18,7 @@ public class ChangeDetector implements IChangeDetector {
     public boolean detect(String instanceId, String metricName, double value) {
         var detectionConfig = config.getMetricDetectionMap().get(metricName);
         if (detectionConfig.getType() == DetectionType.EVENT){
-            return value > 0;
+            return value > detectionConfig.getEventThreshold();
         }
 
         var existingModel = databaseStorage.getEwmaCusumModel(instanceId, metricName);
