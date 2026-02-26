@@ -1,4 +1,4 @@
-package at.uibk.dps.coordinator.module.producer.metric.collector.abstraction;
+package at.uibk.dps.coordinator.module.producer.metric.collect.abstraction;
 
 import java.util.Map;
 

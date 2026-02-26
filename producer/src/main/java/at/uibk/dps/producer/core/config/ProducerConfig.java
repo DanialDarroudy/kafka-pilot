@@ -18,7 +18,6 @@ public class ProducerConfig {
     private int lingerMs = 1;
     private long bufferMemory = 33554432;
     private CompressionType compressionType = CompressionType.NONE;
-    private String acks = "1";
     private String bootstrapServers;
     private String topic = "messages";
 
@@ -29,7 +28,6 @@ public class ProducerConfig {
         properties.put("linger.ms", lingerMs);
         properties.put("buffer.memory", bufferMemory);
         properties.put("compression.type", compressionType.name().toLowerCase());
-        properties.put("acks", acks);
         properties.put("key.serializer", StringSerializer.class.getName());
         properties.put("value.serializer", ByteArraySerializer.class.getName());
         properties.put("client.id", id);

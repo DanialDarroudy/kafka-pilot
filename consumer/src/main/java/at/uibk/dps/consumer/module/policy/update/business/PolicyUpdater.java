@@ -18,8 +18,6 @@ public class PolicyUpdater implements IPolicyUpdater {
         config.setFetchMinBytes(dto.getFetchMinBytes());
         config.setFetchMaxWaitMs(dto.getFetchMaxWaitMs());
         config.setMaxPollRecords(dto.getMaxPollRecords());
-        config.setMaxPollIntervalMs(dto.getMaxPollIntervalMs());
-        config.setSessionTimeoutMs(dto.getSessionTimeoutMs());
         consumerManager.policyChanged();
     }
 }

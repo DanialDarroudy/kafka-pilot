@@ -28,8 +28,6 @@ public class ProducerMetricBinder {
             "outgoing-byte-rate", "By/s",
             "request-latency-avg", "ms",
             "request-latency-max", "ms",
-            "record-error-rate", "/s",
-            "record-retry-rate", "/s",
             "buffer-available-bytes", "By"
     );
 

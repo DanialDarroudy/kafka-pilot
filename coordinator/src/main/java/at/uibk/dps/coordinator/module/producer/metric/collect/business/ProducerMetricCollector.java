@@ -1,6 +1,6 @@
-package at.uibk.dps.coordinator.module.producer.metric.collector.business;
+package at.uibk.dps.coordinator.module.producer.metric.collect.business;
 
-import at.uibk.dps.coordinator.module.producer.metric.collector.abstraction.IProducerMetricCollector;
+import at.uibk.dps.coordinator.module.producer.metric.collect.abstraction.IProducerMetricCollector;
 import at.uibk.dps.coordinator.module.prometheus.query.abstraction.IPrometheusClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,8 +16,6 @@ public class ProducerMetricCollector implements IProducerMetricCollector {
     private static final List<String> METRIC_QUERIES = List.of(
             "rate(kafka_producer_record_send_rate{producer_id=\"%s\"}[30s])",
             "rate(kafka_producer_outgoing_byte_rate{producer_id=\"%s\"}[30s])",
-            "rate(kafka_producer_record_error_rate{producer_id=\"%s\"}[30s])",
-            "rate(kafka_producer_record_retry_rate{producer_id=\"%s\"}[30s])",
             "avg_over_time(kafka_producer_record_size_avg{producer_id=\"%s\"}[30s])",
             "avg_over_time(kafka_producer_request_latency_avg{producer_id=\"%s\"}[30s])",
             "avg_over_time(kafka_producer_request_latency_max{producer_id=\"%s\"}[30s])",

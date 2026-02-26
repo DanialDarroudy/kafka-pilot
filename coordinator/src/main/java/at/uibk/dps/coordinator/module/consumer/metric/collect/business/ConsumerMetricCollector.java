@@ -1,6 +1,6 @@
-package at.uibk.dps.coordinator.module.consumer.metric.collector.business;
+package at.uibk.dps.coordinator.module.consumer.metric.collect.business;
 
-import at.uibk.dps.coordinator.module.consumer.metric.collector.abstraction.IConsumerMetricCollection;
+import at.uibk.dps.coordinator.module.consumer.metric.collect.abstraction.IConsumerMetricCollector;
 import at.uibk.dps.coordinator.module.prometheus.query.abstraction.IPrometheusClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class ConsumerMetricCollection implements IConsumerMetricCollection {
+public class ConsumerMetricCollector implements IConsumerMetricCollector {
     private final IPrometheusClient prometheusClient;
     private static final List<String> METRIC_QUERIES = List.of(
             "avg_over_time(kafka_consumer_records_lag_max{consumer_id=\"%s\"}[30s])",

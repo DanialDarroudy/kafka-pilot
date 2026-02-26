@@ -9,6 +9,4 @@ public class GetPolicyResponseDto {
     private int fetchMinBytes;
     private int fetchMaxWaitMs;
     private int maxPollRecords;
-    private int maxPollIntervalMs;
-    private int sessionTimeoutMs;
 }

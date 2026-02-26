@@ -15,7 +15,6 @@ public class PolicyGetter implements IPolicyGetter {
     public GetPolicyResponseDto getPolicy() {
         return GetPolicyResponseDto.builder()
                 .compressionType(config.getCompressionType())
-                .acks(config.getAcks())
                 .bufferMemory(config.getBufferMemory())
                 .batchSize(config.getBatchSize())
                 .lingerMs(config.getLingerMs())

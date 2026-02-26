@@ -17,8 +17,6 @@ public class PolicyGetter implements IPolicyGetter {
                 .fetchMinBytes(config.getFetchMinBytes())
                 .fetchMaxWaitMs(config.getFetchMaxWaitMs())
                 .maxPollRecords(config.getMaxPollRecords())
-                .sessionTimeoutMs(config.getSessionTimeoutMs())
-                .maxPollIntervalMs(config.getMaxPollIntervalMs())
                 .build();
     }
 }

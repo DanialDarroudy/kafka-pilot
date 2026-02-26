@@ -9,21 +9,17 @@ import java.util.Map;
 @Data
 @Builder
 public class ApplyBrokerConfigRequestDto {
-    private int minInSyncReplicas;
+    private int numPartitions;
+    private short replicationFactor;
     private int logSegmentBytes;
-    private long logRetentionMs;
-    private int numNetworkThreads;
-    private int numIoThreads;
-    private int replicaFetchMaxBytes;
+    private int minInSyncReplicas;
 
     public Map<String, String> toKafkaConfigMap() {
         var map = new HashMap<String, String>();
-        map.put("min.insync.replicas", String.valueOf(minInSyncReplicas));
+        map.put("num.partitions", String.valueOf(numPartitions));
+        map.put("replication.factor", String.valueOf(replicationFactor));
         map.put("log.segment.bytes", String.valueOf(logSegmentBytes));
-        map.put("log.retention.ms", String.valueOf(logRetentionMs));
-        map.put("num.network.threads", String.valueOf(numNetworkThreads));
-        map.put("num.io.threads", String.valueOf(numIoThreads));
-        map.put("replica.fetch.max.bytes", String.valueOf(replicaFetchMaxBytes));
+        map.put("min.insync.replicas", String.valueOf(minInSyncReplicas));
         return map;
     }
 }

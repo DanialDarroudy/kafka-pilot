@@ -35,7 +35,7 @@ consumer:
 broker:
   bootstrapServers: localhost:9092
   ids:
-    - 1
+    - "1"
 
 regime-detection:
   metric-detection-map:
@@ -99,10 +99,27 @@ regime-detection:
       cusum-threshold: 10000000
       cusum-drift: 1000000
 
-    record-error-rate:
-      type: event
-      event-threshold: 0.1
+    # for broker
+    disk-io:
+      type: ewma_cusum
+      ewma-alpha: 0.3
+      cusum-threshold: 1000
+      cusum-drift: 50
 
-    record-retry-rate:
-      type: event
-      event-threshold: 0.5
+    network-io:
+      type: ewma_cusum
+      ewma-alpha: 0.3
+      cusum-threshold: 1000
+      cusum-drift: 50
+
+    replica-lag:
+      type: ewma_cusum
+      ewma-alpha: 0.4
+      cusum-threshold: 500
+      cusum-drift: 20
+
+    partition-load:
+      type: ewma_cusum
+      ewma-alpha: 0.4
+      cusum-threshold: 500
+      cusum-drift: 20

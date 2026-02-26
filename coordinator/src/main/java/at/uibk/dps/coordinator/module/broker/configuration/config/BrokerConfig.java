@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "broker")
 public class BrokerConfig {
     private String bootstrapServers;
-    private int[] ids;
+    private String[] ids;
 }

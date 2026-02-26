@@ -19,7 +19,6 @@ public class PolicyUpdater implements IPolicyUpdater {
         config.setBatchSize(dto.getBatchSize());
         config.setBufferMemory(dto.getBufferMemory());
         config.setCompressionType(dto.getCompressionType());
-        config.setAcks(dto.getAcks());
         producerManager.policyChanged();
     }
 }

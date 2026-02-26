@@ -17,8 +17,6 @@ public class ConsumerConfig {
     private int fetchMinBytes = 1048576;
     private int fetchMaxWaitMs = 50;
     private int maxPollRecords = 500;
-    private int maxPollIntervalMs = 300000;
-    private int sessionTimeoutMs = 10000;
     private String bootstrapServers;
     private String topic = "messages";
     private String groupId = "consumer-group";
@@ -30,8 +28,6 @@ public class ConsumerConfig {
         properties.put("fetch.min.bytes", fetchMinBytes);
         properties.put("fetch.max.wait.ms", fetchMaxWaitMs);
         properties.put("max.poll.records", maxPollRecords);
-        properties.put("session.timeout.ms", sessionTimeoutMs);
-        properties.put("max.poll.interval.ms", maxPollIntervalMs);
         properties.put("key.deserializer", StringDeserializer.class.getName());
         properties.put("value.deserializer", ByteArrayDeserializer.class.getName());
         properties.put("client.id", id);
