@@ -11,9 +11,7 @@ import java.util.Map;
 @Component
 @ConfigurationProperties(prefix = "regime-detection")
 public class RegimeDetectionConfig {
-    private Map<String, DetectionConfig> consumer = new HashMap<>();
-    private Map<String, DetectionConfig> producer = new HashMap<>();
-    private Map<String, DetectionConfig> broker = new HashMap<>();
+    private Map<String, DetectionConfig> metricDetectionMap = new HashMap<>();
 
     @Data
     public static class DetectionConfig {

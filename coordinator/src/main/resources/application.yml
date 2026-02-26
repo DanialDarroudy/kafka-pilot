@@ -38,7 +38,7 @@ broker:
     - 1
 
 regime-detection:
-  consumer:
+  metric-detection-map:
     records-lag-max:
       type: ewma_cusum
       ewma-alpha: 0.2
