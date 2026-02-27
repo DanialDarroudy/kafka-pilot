@@ -17,8 +17,10 @@ exporters:
   kafka:
     brokers:
       - kafka-logs:19094
-    topic: otel-logs
-    encoding: otlp_json
+    topic: "otel-logs"
+    encoding: "otlp_proto"
+    sending_queue:
+      enabled: true
 
 service:
   pipelines:

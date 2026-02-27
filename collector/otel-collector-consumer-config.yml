@@ -2,8 +2,10 @@ receivers:
   kafka:
     brokers:
       - kafka-logs:19094
-    topic: otel-logs
-    encoding: otlp_json
+    topic: "otel-logs"
+    encoding: "otlp_proto"
+    group_id: "otel-logs-consumer"
+    initial_offset: earliest
 
 processors:
   batch:
@@ -14,6 +16,10 @@ exporters:
     endpoints:
       - http://elasticsearch:9200
     logs_index: otel-logs
+    sending_queue:
+      enabled: true
+    tls:
+      insecure: true
 
 service:
   pipelines:

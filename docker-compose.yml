@@ -28,7 +28,11 @@ services:
 
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      CLUSTER_ID: "data-cluster-1234567890"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_NUM_PARTITIONS: 12
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      KAFKA_MIN_INSYNC_REPLICAS: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -37,6 +41,7 @@ services:
       KAFKA_JMX_HOSTNAME: kafka-data
     networks:
       - kafka-net
+    restart: unless-stopped
 
   kafka-logs:
     image: confluentinc/cp-kafka:7.5.0
@@ -66,15 +71,22 @@ services:
 
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      CLUSTER_ID: "logs-cluster-0987654321"
-      KAFKA_LOG_RETENTION_HOURS: 1
+      CLUSTER_ID: "q1Sh-9IsQ2G4L8KxZp9mVQ"
+      KAFKA_NUM_PARTITIONS: 12
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_LOG_SEGMENT_BYTES: 536870912
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     networks:
       - kafka-net
+    restart: unless-stopped
 
   otel-collector-producer:
-    image: otel/opentelemetry-collector-contrib:0.91.0
+    image: otel/opentelemetry-collector-contrib:0.108.0
     container_name: otel-collector-producer
     command: ["--config=/etc/otel-collector-producer-config.yaml"]
     volumes:
@@ -92,7 +104,7 @@ services:
     restart: unless-stopped
 
   otel-collector-consumer:
-    image: otel/opentelemetry-collector-contrib:0.91.0
+    image: otel/opentelemetry-collector-contrib:0.108.0
     container_name: otel-collector-consumer
     command: ["--config=/etc/otel-collector-consumer-config.yaml"]
     volumes:
@@ -122,9 +134,9 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
-    volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+#    volumes:
+#      - ./grafana/provisioning:/etc/grafana/provisioning
+#      - ./grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
       - prometheus
     networks:
@@ -132,7 +144,7 @@ services:
     restart: unless-stopped
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    image: elasticsearch:8.11.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -141,9 +153,10 @@ services:
       - "9200:9200"
     networks:
       - kafka-net
+    restart: unless-stopped
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.0
+    image: kibana:8.11.0
     container_name: kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
@@ -153,6 +166,7 @@ services:
       - elasticsearch
     networks:
       - kafka-net
+    restart: unless-stopped
 
   k6:
     build:
@@ -162,6 +176,7 @@ services:
     tty: true
     networks:
       - kafka-net
+    restart: unless-stopped
 
 networks:
   kafka-net:

@@ -42,21 +42,21 @@ regime-detection:
     # for consumer
     records-lag-max:
       type: ewma_cusum
-      ewma-alpha: 0.2
-      cusum-threshold: 2000
+      ewma-alpha: 0.25
+      cusum-threshold: 1500
       cusum-drift: 50
 
     fetch-rate:
       type: ewma_cusum
-      ewma-alpha: 0.4
-      cusum-threshold: 500
-      cusum-drift: 20
+      ewma-alpha: 0.35
+      cusum-threshold: 700
+      cusum-drift: 100
 
     commit-rate:
       type: ewma_cusum
-      ewma-alpha: 0.5
-      cusum-threshold: 300
-      cusum-drift: 10
+      ewma-alpha: 0.4
+      cusum-threshold: 500
+      cusum-drift: 50
 
     join-total:
       type: event
@@ -66,62 +66,62 @@ regime-detection:
     record-send-rate:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 1000
-      cusum-drift: 100
+      cusum-threshold: 2000
+      cusum-drift: 200
 
     outgoing-byte-rate:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 500000
-      cusum-drift: 10000
+      cusum-threshold: 400000
+      cusum-drift: 50000
 
     record-size-avg:
       type: ewma_cusum
       ewma-alpha: 0.2
-      cusum-threshold: 500
-      cusum-drift: 10
+      cusum-threshold: 400
+      cusum-drift: 20
 
     request-latency-avg:
       type: ewma_cusum
       ewma-alpha: 0.4
-      cusum-threshold: 20
+      cusum-threshold: 15
       cusum-drift: 2
 
     request-latency-max:
       type: ewma_cusum
       ewma-alpha: 0.4
-      cusum-threshold: 50
+      cusum-threshold: 30
       cusum-drift: 5
 
     buffer-available-bytes:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 10000000
+      cusum-threshold: 8000000
       cusum-drift: 1000000
 
     # for broker
     disk-io:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 1000
+      cusum-threshold: 700
       cusum-drift: 50
 
     network-io:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 1000
+      cusum-threshold: 700
       cusum-drift: 50
 
     replica-lag:
       type: ewma_cusum
       ewma-alpha: 0.4
-      cusum-threshold: 500
+      cusum-threshold: 400
       cusum-drift: 20
 
     partition-load:
       type: ewma_cusum
       ewma-alpha: 0.4
-      cusum-threshold: 500
+      cusum-threshold: 400
       cusum-drift: 20
 
 workload-classification:
@@ -130,42 +130,42 @@ workload-classification:
     record-send-rate:
       streaming:
         operator: ">"
-        threshold: 5000
+        threshold: 3500
       batch:
         operator: "<="
-        threshold: 5000
+        threshold: 3500
 
     outgoing-byte-rate:
       streaming:
         operator: ">"
-        threshold: 800000
+        threshold: 350000
       batch:
         operator: "<="
-        threshold: 800000
+        threshold: 350000
 
     record-size-avg:
       streaming:
         operator: "<"
-        threshold: 500
+        threshold: 1000
       batch:
         operator: ">="
-        threshold: 500
+        threshold: 1000
 
     request-latency-avg:
       streaming:
         operator: "<"
-        threshold: 20
+        threshold: 15
       batch:
         operator: ">="
-        threshold: 20
+        threshold: 15
 
     request-latency-max:
       streaming:
         operator: "<"
-        threshold: 50
+        threshold: 30
       batch:
         operator: ">="
-        threshold: 50
+        threshold: 30
 
     buffer-available-bytes:
       streaming:
@@ -179,26 +179,26 @@ workload-classification:
     records-lag-max:
       streaming:
         operator: "<"
-        threshold: 1000
+        threshold: 1500
       batch:
         operator: ">="
-        threshold: 1000
+        threshold: 1500
 
     fetch-rate:
       streaming:
         operator: ">"
-        threshold: 1000
+        threshold: 1200
       batch:
         operator: "<="
-        threshold: 1000
+        threshold: 1200
 
     commit-rate:
       streaming:
         operator: ">"
-        threshold: 800
+        threshold: 1000
       batch:
         operator: "<="
-        threshold: 800
+        threshold: 1000
 
     join-total:
       streaming:
@@ -212,34 +212,34 @@ workload-classification:
     disk-io:
       streaming:
         operator: "<"
-        threshold: 800
+        threshold: 700
       batch:
         operator: ">="
-        threshold: 800
+        threshold: 700
 
     network-io:
       streaming:
         operator: ">"
-        threshold: 800
+        threshold: 700
       batch:
         operator: "<="
-        threshold: 800
+        threshold: 700
 
     replica-lag:
       streaming:
         operator: "<"
-        threshold: 500
+        threshold: 400
       batch:
         operator: ">="
-        threshold: 500
+        threshold: 400
 
     partition-load:
       streaming:
         operator: "<"
-        threshold: 500
+        threshold: 400
       batch:
         operator: ">="
-        threshold: 500
+        threshold: 400
 
 policy-bank:
   workloads:
@@ -257,7 +257,7 @@ policy-bank:
 
       broker:
         num-partitions: 12
-        replication-factor: 2
+        replication-factor: 1
         log-segment-bytes: 536870912
         min-in-sync-replicas: 1
 
@@ -275,6 +275,6 @@ policy-bank:
 
       broker:
         num-partitions: 6
-        replication-factor: 3
+        replication-factor: 1
         log-segment-bytes: 1073741824
-        min-in-sync-replicas: 2
+        min-in-sync-replicas: 1

@@ -1,8 +1,8 @@
 FROM grafana/k6:0.49.0
 
-WORKDIR /scripts
+WORKDIR /script
 
-COPY scripts/poisson.js /scripts/poisson.js
-COPY run.sh /scripts/run.sh
+COPY script/streaming.js /script/batch.js
+COPY run.sh /script/run.sh
 
 ENTRYPOINT ["sh"]
