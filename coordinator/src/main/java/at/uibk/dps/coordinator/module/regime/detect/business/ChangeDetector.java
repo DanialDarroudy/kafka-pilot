@@ -2,8 +2,8 @@ package at.uibk.dps.coordinator.module.regime.detect.business;
 
 import at.uibk.dps.coordinator.core.database.abstraction.IDatabaseStorage;
 import at.uibk.dps.coordinator.core.database.model.EwmaCusumModel;
-import at.uibk.dps.coordinator.module.regime.configuration.DetectionType;
-import at.uibk.dps.coordinator.module.regime.configuration.RegimeDetectionConfig;
+import at.uibk.dps.coordinator.module.regime.detect.config.DetectionType;
+import at.uibk.dps.coordinator.module.regime.detect.config.RegimeDetectionConfig;
 import at.uibk.dps.coordinator.module.regime.detect.abstraction.IChangeDetector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
