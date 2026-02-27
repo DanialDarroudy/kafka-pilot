@@ -1,6 +1,6 @@
 package at.uibk.dps.coordinator.module.prometheus.query.business;
 
-import at.uibk.dps.coordinator.module.prometheus.configuration.PrometheusConfig;
+import at.uibk.dps.coordinator.module.prometheus.config.PrometheusConfig;
 import at.uibk.dps.coordinator.module.prometheus.query.abstraction.IPrometheusClient;
 import at.uibk.dps.coordinator.module.prometheus.query.dto.PrometheusResponseDto;
 import io.opentelemetry.api.logs.Logger;
