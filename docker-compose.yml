@@ -1,0 +1,167 @@
+services:
+  kafka-data:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-data
+    hostname: kafka-data
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+      - "9101:9101"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-data:9093"
+
+      KAFKA_LISTENERS: >
+        PLAINTEXT_HOST://0.0.0.0:9092,
+        PLAINTEXT_DOCKER://0.0.0.0:19092,
+        CONTROLLER://0.0.0.0:9093
+
+      KAFKA_ADVERTISED_LISTENERS: >
+        PLAINTEXT_HOST://localhost:9092,
+        PLAINTEXT_DOCKER://kafka-data:19092
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: >
+        PLAINTEXT_HOST:PLAINTEXT,
+        PLAINTEXT_DOCKER:PLAINTEXT,
+        CONTROLLER:PLAINTEXT
+
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      CLUSTER_ID: "data-cluster-1234567890"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: kafka-data
+    networks:
+      - kafka-net
+
+  kafka-logs:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka-logs
+    hostname: kafka-logs
+    ports:
+      - "9094:9094"
+      - "19094:19094"
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "2@kafka-logs:9095"
+
+      KAFKA_LISTENERS: >
+        PLAINTEXT_HOST://0.0.0.0:9094,
+        PLAINTEXT_DOCKER://0.0.0.0:19094,
+        CONTROLLER://0.0.0.0:9095
+
+      KAFKA_ADVERTISED_LISTENERS: >
+        PLAINTEXT_HOST://localhost:9094,
+        PLAINTEXT_DOCKER://kafka-logs:19094
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: >
+        PLAINTEXT_HOST:PLAINTEXT,
+        PLAINTEXT_DOCKER:PLAINTEXT,
+        CONTROLLER:PLAINTEXT
+
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      CLUSTER_ID: "logs-cluster-0987654321"
+      KAFKA_LOG_RETENTION_HOURS: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - kafka-net
+
+  otel-collector-producer:
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    container_name: otel-collector-producer
+    command: ["--config=/etc/otel-collector-producer-config.yaml"]
+    volumes:
+      - ./collector/otel-collector-producer-config.yml:/etc/otel-collector-producer-config.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8888:8888"
+      - "8889:8889"
+    depends_on:
+      - kafka-logs
+      - prometheus
+    networks:
+      - kafka-net
+    restart: unless-stopped
+
+  otel-collector-consumer:
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    container_name: otel-collector-consumer
+    command: ["--config=/etc/otel-collector-consumer-config.yaml"]
+    volumes:
+      - ./collector/otel-collector-consumer-config.yml:/etc/otel-collector-consumer-config.yaml
+    depends_on:
+      - kafka-logs
+      - elasticsearch
+    networks:
+      - kafka-net
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - kafka-net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - kafka-net
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - kafka-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - kafka-net
+
+  k6:
+    build:
+      context: ./k6
+    container_name: k6
+    stdin_open: true
+    tty: true
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:

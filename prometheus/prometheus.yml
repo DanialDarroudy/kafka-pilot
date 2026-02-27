@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'otel-metrics'
+    static_configs:
+      - targets: ['otel-collector-producer:8889']
+
+  - job_name: 'kafka-data'
+    static_configs:
+      - targets: ['kafka-data:9101']

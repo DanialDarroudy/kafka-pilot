@@ -66,7 +66,7 @@ regime-detection:
     record-send-rate:
       type: ewma_cusum
       ewma-alpha: 0.3
-      cusum-threshold: 5000
+      cusum-threshold: 1000
       cusum-drift: 100
 
     outgoing-byte-rate:
@@ -130,10 +130,10 @@ workload-classification:
     record-send-rate:
       streaming:
         operator: ">"
-        threshold: 40000
+        threshold: 5000
       batch:
         operator: "<="
-        threshold: 40000
+        threshold: 5000
 
     outgoing-byte-rate:
       streaming:

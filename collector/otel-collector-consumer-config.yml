@@ -1,0 +1,23 @@
+receivers:
+  kafka:
+    brokers:
+      - kafka-logs:19094
+    topic: otel-logs
+    encoding: otlp_json
+
+processors:
+  batch:
+    timeout: 10s
+
+exporters:
+  elasticsearch:
+    endpoints:
+      - http://elasticsearch:9200
+    logs_index: otel-logs
+
+service:
+  pipelines:
+    logs:
+      receivers: [kafka]
+      processors: [batch]
+      exporters: [elasticsearch]

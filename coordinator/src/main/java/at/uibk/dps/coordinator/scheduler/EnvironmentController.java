@@ -48,7 +48,7 @@ public class EnvironmentController {
     private final ConsumerConfig consumerConfig;
     private final BrokerConfig brokerConfig;
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 30000)
     public void execute() {
         logger.logRecordBuilder()
                 .setAttribute("Message", "Control loop started...")
