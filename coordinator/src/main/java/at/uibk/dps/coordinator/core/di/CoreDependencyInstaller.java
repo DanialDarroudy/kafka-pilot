@@ -1,6 +1,6 @@
 package at.uibk.dps.coordinator.core.di;
 
-import at.uibk.dps.coordinator.module.broker.configuration.config.BrokerConfig;
+import at.uibk.dps.coordinator.module.configuration.broker.config.BrokerConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
