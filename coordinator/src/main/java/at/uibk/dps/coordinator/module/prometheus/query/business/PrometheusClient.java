@@ -25,6 +25,11 @@ public class PrometheusClient implements IPrometheusClient {
         try {
             var encoded = URLEncoder.encode(promQl, StandardCharsets.UTF_8);
             var url = config.getUrl() + "/api/v1/query?query=" + encoded;
+            logger.logRecordBuilder()
+                    .setAttribute("Message", "Query on prometheus")
+                    .setAttribute("PromQl", promQl)
+                    .setSeverity(Severity.INFO)
+                    .emit();
             var response = restTemplate.getForObject(url, PrometheusResponseDto.class);
             if (response == null) {
                 return 0.0;

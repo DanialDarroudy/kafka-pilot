@@ -23,6 +23,12 @@ public class BrokerConfigApplier implements IBrokerConfigApplier {
 
     @Override
     public void apply(String brokerId, ApplyBrokerConfigRequestDto dto) {
+        logger.logRecordBuilder()
+                .setAttribute("Message", "Applying broker config")
+                .setAttribute("BrokerId", brokerId)
+                .setSeverity(Severity.INFO)
+                .setBody(dto.toString())
+                .emit();
         try {
             var id = brokerId.replace("broker-", "");
             var resource = new ConfigResource(ConfigResource.Type.BROKER, id);

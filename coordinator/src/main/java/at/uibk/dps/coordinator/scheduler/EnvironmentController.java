@@ -1,4 +1,4 @@
-package at.uibk.dps.coordinator.controller;
+package at.uibk.dps.coordinator.scheduler;
 
 import at.uibk.dps.coordinator.core.database.abstraction.IDatabaseStorage;
 import at.uibk.dps.coordinator.module.configuration.broker.apply.abstraction.IBrokerConfigApplier;
@@ -56,8 +56,8 @@ public class EnvironmentController {
                 .emit();
 
         processProducers();
-        processConsumers();
         processBrokers();
+        processConsumers();
 
         logger.logRecordBuilder()
                 .setAttribute("Message", "Control loop finished")
@@ -93,6 +93,13 @@ public class EnvironmentController {
             var metricName = entry.getKey();
             var value = entry.getValue();
             var changed = changeDetector.detect(instanceId, metricName, value);
+            logger.logRecordBuilder()
+                    .setAttribute("Message", "Status of metric")
+                    .setAttribute("InstanceId", instanceId)
+                    .setAttribute("MetricName", metricName)
+                    .setAttribute("IsChanged", changed)
+                    .setSeverity(Severity.INFO)
+                    .emit();
             if (changed) {
                 classifier.classify(instanceId, metricName, value);
             }
@@ -106,6 +113,7 @@ public class EnvironmentController {
                     .setAttribute("Message", "Instance workload switching is occurred.")
                     .setAttribute("InstanceId", instanceId)
                     .setAttribute("newWorkload", newWorkload)
+                    .setSeverity(Severity.INFO)
                     .emit();
 
             applyPolicy(type, instanceId, newWorkload);
