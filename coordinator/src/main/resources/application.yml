@@ -35,7 +35,7 @@ consumer:
 broker:
   bootstrapServers: localhost:9092
   ids:
-    - "1"
+    - broker-1
 
 regime-detection:
   metric-detection-map:
@@ -123,3 +123,158 @@ regime-detection:
       ewma-alpha: 0.4
       cusum-threshold: 500
       cusum-drift: 20
+
+workload-classification:
+  metrics:
+    # for producer
+    record-send-rate:
+      streaming:
+        operator: ">"
+        threshold: 40000
+      batch:
+        operator: "<="
+        threshold: 40000
+
+    outgoing-byte-rate:
+      streaming:
+        operator: ">"
+        threshold: 800000
+      batch:
+        operator: "<="
+        threshold: 800000
+
+    record-size-avg:
+      streaming:
+        operator: "<"
+        threshold: 500
+      batch:
+        operator: ">="
+        threshold: 500
+
+    request-latency-avg:
+      streaming:
+        operator: "<"
+        threshold: 20
+      batch:
+        operator: ">="
+        threshold: 20
+
+    request-latency-max:
+      streaming:
+        operator: "<"
+        threshold: 50
+      batch:
+        operator: ">="
+        threshold: 50
+
+    buffer-available-bytes:
+      streaming:
+        operator: ">"
+        threshold: 20000000
+      batch:
+        operator: "<="
+        threshold: 20000000
+
+    # for consumer
+    records-lag-max:
+      streaming:
+        operator: "<"
+        threshold: 1000
+      batch:
+        operator: ">="
+        threshold: 1000
+
+    fetch-rate:
+      streaming:
+        operator: ">"
+        threshold: 1000
+      batch:
+        operator: "<="
+        threshold: 1000
+
+    commit-rate:
+      streaming:
+        operator: ">"
+        threshold: 800
+      batch:
+        operator: "<="
+        threshold: 800
+
+    join-total:
+      streaming:
+        operator: "=="
+        threshold: 0
+      batch:
+        operator: ">"
+        threshold: 0
+
+    # for broker
+    disk-io:
+      streaming:
+        operator: "<"
+        threshold: 800
+      batch:
+        operator: ">="
+        threshold: 800
+
+    network-io:
+      streaming:
+        operator: ">"
+        threshold: 800
+      batch:
+        operator: "<="
+        threshold: 800
+
+    replica-lag:
+      streaming:
+        operator: "<"
+        threshold: 500
+      batch:
+        operator: ">="
+        threshold: 500
+
+    partition-load:
+      streaming:
+        operator: "<"
+        threshold: 500
+      batch:
+        operator: ">="
+        threshold: 500
+
+policy-bank:
+  workloads:
+    streaming:
+      producer:
+        batch-size: 32768
+        linger-ms: 5
+        buffer-memory: 67108864
+        compression-type: lz4
+
+      consumer:
+        fetch-min-bytes: 1
+        fetch-max-wait-ms: 50
+        max-poll-records: 500
+
+      broker:
+        num-partitions: 12
+        replication-factor: 2
+        log-segment-bytes: 536870912
+        min-in-sync-replicas: 1
+
+    batch:
+      producer:
+        batch-size: 131072
+        linger-ms: 50
+        buffer-memory: 134217728
+        compression-type: zstd
+
+      consumer:
+        fetch-min-bytes: 65536
+        fetch-max-wait-ms: 500
+        max-poll-records: 2000
+
+      broker:
+        num-partitions: 6
+        replication-factor: 3
+        log-segment-bytes: 1073741824
+        min-in-sync-replicas: 2
